@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Recommender</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'recommender/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button id="lang-toggle" class="lang-btn">हिन्दी</button>
+            <h1 data-key="main_title">Find Your Perfect Internship ✨</h1>
+            <p data-key="main_subtitle">Answer a few questions to get 3-5 personalized recommendations.</p>
+        </header>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div id="wizard-form">
+            <div class="step active" id="step-1">
+                <h2 data-key="welcome_title">Welcome!</h2>
+                <p data-key="welcome_subtitle">Let's get started. It only takes a minute.</p>
+                <button class="btn-primary" data-next="2" data-key="start_now_btn">Start Now</button>
+            </div>
+
+            <div class="step" id="step-2">
+                <h2><span data-key="edu_title">🎓 Your Education</span> <span class="speaker-icon">🔊</span></h2>
+                <div class="form-group">
+                    <label for="degree" data-key="edu_q1">What is your highest qualification?</label>
+                    <select id="degree">
+                        <option value="btech" data-key="btech">B.Tech / B.E.</option>
+                        <option value="ba" data-key="ba">B.A.</option>
+                        <option value="bcom" data-key="bcom">B.Com</option>
+                        <option value="bsc" data-key="bsc">B.Sc</option>
+                        <option value="polytechnic" data-key="polytechnic">Polytechnic / Diploma</option>
+                        <option value="other" data-key="other">Other</option>
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label for="field" data-key="edu_q2">What is your field of study?</label>
+                    <select id="field">
+                        <option value="cs" data-key="cs">Computer Science</option>
+                        <option value="mech" data-key="mech">Mechanical Engineering</option>
+                        <option value="electronics" data-key="electronics">Electronics</option>
+                        <option value="commerce" data-key="commerce">Commerce</option>
+                        <option value="arts" data-key="arts">Arts</option>
+                    </select>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="wfh-checkbox">
+                    <label for="wfh-checkbox" data-key="wfh_checkbox">Show me Work From Home internships only</label>
+                </div>
+                <button class="btn-secondary" data-prev="1" data-key="back_btn">Back</button>
+                <button class="btn-primary" data-next="3" data-key="next_btn">Next</button>
+            </div>
+
+            <div class="step" id="step-3">
+                <h2><span data-key="skills_title">💡 Your Skills</span> <span class="speaker-icon">🔊</span></h2>
+                <p data-key="skills_subtitle">Select a few skills you have (or want to learn).</p>
+                <div class="tag-container" id="skills-container">
+                    <div class="tag" data-skill="Communication" data-key="skill_comm">Communication</div>
+                    <div class="tag" data-skill="Teamwork" data-key="skill_team">Teamwork</div>
+                    <div class="tag" data-skill="Python" data-key="skill_python">Python</div>
+                    <div class="tag" data-skill="Java" data-key="skill_java">Java</div>
+                    <div class="tag" data-skill="Marketing" data-key="skill_mktg">Marketing</div>
+                    <div class="tag" data-skill="Sales" data-key="skill_sales">Sales</div>
+                    <div class="tag" data-skill="MS Office" data-key="skill_office">MS Office</div>
+                    <div class="tag" data-skill="Data Analysis" data-key="skill_data">Data Analysis</div>
+                </div>
+                <button class="btn-secondary" data-prev="2" data-key="back_btn">Back</button>
+                <button class="btn-primary" data-next="4" data-key="next_btn">Next</button>
+            </div>
+
+            <div class="step" id="step-4">
+                <h2><span data-key="interests_title">🎯 Your Interests</span> <span class="speaker-icon">🔊</span></h2>
+                <p data-key="interests_subtitle">Which sectors are you interested in?</p>
+                <div class="interest-container" id="interests-container">
+                    <div class="interest-card" data-interest="IT"><span class="emoji">💻</span> <span data-key="interest_it">IT & Software</span></div>
+                    <div class="interest-card" data-interest="Marketing"><span class="emoji">📈</span> <span data-key="interest_mktg">Marketing & Sales</span></div>
+                    <div class="interest-card" data-interest="Engineering"><span class="emoji">⚙️</span> <span data-key="interest_engg">Core Engineering</span></div>
+                    <div class="interest-card" data-interest="Finance"><span class="emoji">💰</span> <span data-key="interest_finance">Finance</span></div>
+                </div>
+                 <button class="btn-secondary" data-prev="3" data-key="back_btn">Back</button>
+                <button class="btn-primary" data-next="5" data-key="next_btn">Next</button>
+            </div>
+
+            <div class="step" id="step-5">
+                <h2><span data-key="location_title">📍 Location Preference</span> <span class="speaker-icon">🔊</span></h2>
+                <div class="form-group">
+                    <label for="location" data-key="location_q1">Where would you like to work?</label>
+                    <select id="location">
+                        <option value="Any" data-key="loc_any">Any Location</option>
+                        <option value="Pune" data-key="loc_pune">Pune</option>
+                        <option value="Mumbai" data-key="loc_mumbai">Mumbai</option>
+                        <option value="Delhi" data-key="loc_delhi">Delhi</option>
+                        <option value="Bangalore" data-key="loc_bangalore">Bangalore</option>
+                        <option value="Work From Home" data-key="loc_wfh">Work From Home</option>
+                    </select>
+                </div>
+                <button class="btn-secondary" data-prev="4" data-key="back_btn">Back</button>
+                <button class="btn-primary" id="submit-btn" data-key="find_btn">Find Internships</button>
+            </div>
+        </div>
+        
+        <div id="loader" class="hidden">
+            <div class="spinner"></div>
+            <p data-key="loader_text">Finding the best matches for you...</p>
+        </div>
+
+        <div id="results-area" class="hidden">
+            <h2 data-key="results_title">🚀 Here are your top matches!</h2>
+            <div id="results-container"></div>
+
+            <div id="whats-next" class="guidance-section">
+                <h3 data-key="next_title">🤔 What should I do next?</h3>
+                <ul>
+                    <li data-key="next_step1">📄 **Prepare Your Resume:** Make sure your contact details are correct.</li>
+                    <li data-key="next_step2">✉️ **Click "View & Apply":** This will open a simple summary. Review it and then proceed to the company's application page.</li>
+                    <li data-key="next_step3">💡 **Be Confident:** Your skills and interests are a great match for these roles!</li>
+                </ul>
+            </div>
+            
+            <div id="feedback-section" class="guidance-section">
+                <h3 data-key="feedback_title">Were these recommendations helpful?</h3>
+                <div class="feedback-buttons">
+                    <button id="feedback-yes">Yes 👍</button>
+                    <button id="feedback-no">No 👎</button>
+                </div>
+                <p id="feedback-thanks" class="hidden" data-key="feedback_thanks">Thank you for your feedback!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="details-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h2 id="modal-title"></h2>
+            <h3 id="modal-company"></h3>
+            <div class="modal-details">
+                <p><strong>📍 Location:</strong> <span id="modal-location"></span></p>
+                <p><strong>⏳ Duration:</strong> <span id="modal-duration"></span></p>
+                <p><strong>💰 Stipend:</strong> <span id="modal-stipend"></span></p>
+            </div>
+            <h4 data-key="modal_role">Your Role:</h4>
+            <p id="modal-description"></p>
+            
+            <div id="skill-gap-section" class="hidden">
+                <h4>Take Your Skills to the Next Level!</h4>
+                <p>This role requires a few skills you haven't selected. Here's a quick guide to get you started:</p>
+                <div id="missing-skills-container"></div>
+            </div>
+
+            <a href="#" id="modal-apply-btn" class="btn-primary" target="_blank" data-key="proceed_btn">Proceed to Apply</a>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = "{% url 'recommendations' %}";
+    </script>
+    <script src="{% static 'recommender/script.js' %}"></script>
+</body>
+</html>
