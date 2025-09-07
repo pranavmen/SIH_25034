@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Recommender</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="particle-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="container">
+        <h1>Find Your Internship</h1>
+
+        <div class="form-group">
+            <label for="skillSelect">Select Your Skills</label>
+            <div style="display: flex; gap: 10px;">
+                <select id="skillSelect">
+                    <option value="Python">Python</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="React">React</option>
+                    <option value="MongoDB">MongoDB</option>
+                    <option value="SQL">SQL</option>
+                    <option value="Data Analysis">Data Analysis</option>
+                    <option value="Machine Learning">Machine Learning</option>
+                    <option value="Video Editing">Video Editing</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Artificial Intelligence">Artificial Intelligence</option>
+                    <option value="Cloud Computing">Cloud Computing</option>
+                    <option value="Cybersecurity">Cybersecurity</option>
+                    <option value="Mobile Development">Mobile Development</option>
+                    <option value="UI/UX Design">UI/UX Design</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Content Writing">Content Writing</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Human Resources">Human Resources</option>
+                </select>
+                <button class="secondary" onclick="addSkill()" style="width: 120px;">Add</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Selected Skills:</label>
+            <div id="selectedSkills"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="locationSelect">Select a Location</label>
+            <select id="locationSelect">
+                <option value="">--Please choose a location--</option>
+                <option value="Pune">Pune</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Work from home">Work from home</option>
+            </select>
+        </div>
+
+        <button onclick="getRecommendations()">Find Internships</button>
+        <div id="results"><p>Results will appear here...</p></div>
+    </div>
+
+    <script>
+        // Your JavaScript functions (addSkill, removeSkill, getRecommendations)
+        // do not need to be changed. They will work with this new HTML structure.
+        const selectedSkills = new Set();
+
+        function addSkill() {
+            const skillSelect = document.getElementById('skillSelect');
+            const skill = skillSelect.value;
+            if (skill && !selectedSkills.has(skill)) {
+                selectedSkills.add(skill);
+                updateSelectedSkillsDisplay();
+            }
+        }
+
+        function removeSkill(skill) {
+            selectedSkills.delete(skill);
+            updateSelectedSkillsDisplay();
+        }
+
+        function updateSelectedSkillsDisplay() {
+            const displayDiv = document.getElementById('selectedSkills');
+            displayDiv.innerHTML = '';
+            selectedSkills.forEach(skill => {
+                displayDiv.innerHTML += `
+                    <span class="skill-tag">
+                        ${skill}
+                        <span class="remove-skill" onclick="removeSkill('${skill}')">&times;</span>
+                    </span>
+                `;
+            });
+        }
+
+        async function getRecommendations() {
+            const location = document.getElementById('locationSelect').value;
+            const resultsDiv = document.getElementById('results');
+            const skillsString = Array.from(selectedSkills).join(',');
+
+            if (!skillsString || !location) {
+                resultsDiv.innerHTML = '<p>Please select at least one skill and a location.</p>';
+                return;
+            }
+
+            resultsDiv.innerHTML = '<p>Loading...</p>';
+
+            const apiUrl = `/api/recommend/?skills=${encodeURIComponent(skillsString)}&location=${encodeURIComponent(location)}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                resultsDiv.innerHTML = ''; // Clear "Loading..."
+
+                if (data.recommendations && data.recommendations.length > 0) {
+                    resultsDiv.innerHTML += `<h3>${data.message}</h3>`;
+                    data.recommendations.forEach(rec => {
+                        const internship = rec.internship;
+                        resultsDiv.innerHTML += `
+                            <div class="internship-card">
+                                <h4>${internship.Title}</h4>
+                                <p><strong>Location:</strong> ${internship.Locations}</p>
+                                <p><strong>Skills:</strong> ${internship.Skills}</p>
+                                <p><strong>Score:</strong> ${rec.final_score.toFixed(4)}</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    resultsDiv.innerHTML = `<p>${data.message || 'No recommendations found.'}</p>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = '<p>An error occurred while fetching recommendations.</p>';
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
